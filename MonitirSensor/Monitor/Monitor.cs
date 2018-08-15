@@ -19,7 +19,7 @@ namespace MonitorProject
 			_outputLog = outputLog;
 		}
 
-		public void Start(bool isForMultipleClients=true)
+		public void Start(bool isForMultipleClients = true)
 		{
 			try
 			{

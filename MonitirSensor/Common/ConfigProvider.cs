@@ -16,10 +16,10 @@ namespace Common
 		public string ipAddress { get { return _ipAddress; } }
 		public int port { get { return _port; } }
 
-		public ConfigProvider(string ipAddress=null, int? port=null)
+		public ConfigProvider(string ipAddress = null, int? port = null)
 		{
-			_ipAddress = ipAddress??ConfigurationManager.AppSettings["IpAddress"];
-			_port = port??int.Parse(ConfigurationManager.AppSettings["Port"]);
+			_ipAddress = ipAddress ?? ConfigurationManager.AppSettings["IpAddress"];
+			_port = port ?? int.Parse(ConfigurationManager.AppSettings["Port"]);
 		}
 	}
 }

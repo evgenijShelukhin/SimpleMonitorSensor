@@ -1,20 +1,18 @@
 ﻿using Common;
+using Moq;
 using NUnit.Framework;
-using MonitorProject;
-using System.Threading;
 using Sensor;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Moq;
 
 namespace Tests
 {
 	[TestFixture]
-    public class SensorTests
+	public class SensorTests
 	{
-		ConfigProvider config;
-		Task monitorServiceThread;
-		IOutputLog monitorOutputLogMock;
+		private ConfigProvider config;
+		private Task monitorServiceThread;
+		private IOutputLog monitorOutputLogMock;
 
 		[SetUp]
 		public void Setup()
@@ -22,9 +20,9 @@ namespace Tests
 			monitorOutputLogMock = Mock.Of<IOutputLog>();
 			Mock.Get(monitorOutputLogMock).Setup(x => x.LogMessage(It.IsAny<string>()));
 
-			config = new ConfigProvider("127.0.0.1",4321);
+			config = new ConfigProvider("127.0.0.1", 4321);
 			var m = new MonitorProject.Monitor(config, monitorOutputLogMock);
-			monitorServiceThread = Task.Run(()=> m.Start(false));
+			monitorServiceThread = Task.Run(() => m.Start(false));
 		}
 
 		[Test]

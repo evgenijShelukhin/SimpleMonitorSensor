@@ -4,7 +4,8 @@ using System.Net.Sockets;
 
 namespace Sensor
 {
-	public interface ITCPSender:IDisposable {
+	public interface ITCPSender : IDisposable
+	{
 		void ProcessMessage(string message);
 	}
 

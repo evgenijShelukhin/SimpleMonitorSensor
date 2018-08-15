@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonitorProject
 {
@@ -11,7 +11,6 @@ namespace MonitorProject
 		private readonly IConfigProvider _configProvider;
 		private readonly IOutputLog _outputLog;
 		private TcpListener listener;
-		private bool isActive;
 
 		public Monitor(IConfigProvider configProvider, IOutputLog outputLog)
 		{
@@ -19,22 +18,21 @@ namespace MonitorProject
 			_outputLog = outputLog;
 		}
 
-		public void Start(bool isForMultipleClients = true)
+		public async Task Start(bool isForMultipleClients = true)
 		{
 			try
 			{
-				isActive = true;
 				listener = new TcpListener(IPAddress.Parse(_configProvider.ipAddress), _configProvider.port);
 				listener.Start();
 				_outputLog.LogMessage("Waiting for clients...");
 
 				while (true)
 				{
-					TcpClient client = listener.AcceptTcpClient();
-					TCPReciever reciever = new TCPReciever(client, _outputLog);
+					TcpClient client = await listener.AcceptTcpClientAsync();
+					TCPReciever reciever = new TCPReciever(client, _outputLog); //TODO create objects with object factory
+
 					_outputLog.LogMessage("New client connected");
-					Thread clientThread = new Thread(new ThreadStart(reciever.ProcessMessages));
-					clientThread.Start();
+					var task = Task.Factory.StartNew(() => reciever.ProcessMessage());
 
 					if (!isForMultipleClients)
 					{

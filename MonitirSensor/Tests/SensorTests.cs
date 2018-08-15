@@ -32,7 +32,7 @@ namespace Tests
 			Mock.Get(sensorOutputLogMock).Setup(x => x.LogMessage(It.IsAny<string>()));
 
 			var sender = new TCPSender(new TcpClient(config.ipAddress, config.port), sensorOutputLogMock);
-			sender.ProcessMessage("42");
+			sender.ProcessMessage("42").Wait();
 
 			//Check Monitor side output
 			Mock.Get(monitorOutputLogMock).Verify(x =>
@@ -46,7 +46,7 @@ namespace Tests
 		[TearDown]
 		public void Dispose()
 		{
-			//monitorServiceThread.c
+			//TODO add switch off the Monitor in case it still running
 		}
 	}
 }

@@ -1,12 +1,13 @@
 ﻿using Common;
 using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Sensor
 {
 	public interface ITCPSender : IDisposable
 	{
-		void ProcessMessage(string message);
+		Task ProcessMessage(string message);
 	}
 
 	public class TCPSender : TcpClientWrap, ITCPSender
@@ -19,12 +20,12 @@ namespace Sensor
 			_output = output;
 		}
 
-		public void ProcessMessage(string message)
+		public async Task ProcessMessage(string message)
 		{
 			try
 			{
-				Send(message);
-				var responceMessage = Read();
+				await Send(message);
+				var responceMessage = await Read();
 				_output.LogMessage($"Sent '{message}' response '{responceMessage}'");
 			}
 			catch (Exception ex)

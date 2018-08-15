@@ -6,8 +6,9 @@ namespace MonitorProject
 	{
 		private static void Main(string[] args)
 		{
-			var monitor = new Monitor(new ConfigProvider(), new OutputLog());
-			monitor.Start();
+			var output = new OutputLog();
+			var monitor = new Monitor(new ConfigProvider(), output);
+			monitor.Start().Wait();
 		}
 	}
 }

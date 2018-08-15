@@ -8,7 +8,6 @@ namespace Sensor
 		private readonly ITCPSender _client;
 		private readonly IMetricsProvider _metricPovider;
 		private readonly IOutputLog _outputLog;
-		private bool isActive;
 
 		public Sensor(IMetricsProvider metricPovider, ITCPSender client, IOutputLog outputLog)
 		{
@@ -30,8 +29,7 @@ namespace Sensor
 
 		public void Stop()
 		{
-			_metricPovider.metricUpdated += SendMessage;
-			isActive = false;
+			_metricPovider.metricUpdated -= SendMessage;
 		}
 
 		public void Dispose()

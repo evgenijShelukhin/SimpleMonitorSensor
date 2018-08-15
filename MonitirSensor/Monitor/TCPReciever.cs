@@ -1,10 +1,16 @@
 ﻿using Common;
 using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace MonitorProject
 {
-	public class TCPReciever : TcpClientWrap
+	public interface ITCPReciever : IDisposable
+	{
+		Task ProcessMessage();
+	}
+
+	public class TCPReciever : TcpClientWrap, ITCPReciever
 	{
 		private readonly IOutputLog _output;
 
@@ -14,14 +20,14 @@ namespace MonitorProject
 			_output = output;
 		}
 
-		public void ProcessMessages()
+		public async Task ProcessMessage()
 		{
 			try
 			{
 				while (true)
 				{
-					var reseivedMessage = Read();
-					Send("OK");
+					var reseivedMessage = await Read();
+					await Send("OK");
 					_output.LogMessage(reseivedMessage);
 				}
 			}

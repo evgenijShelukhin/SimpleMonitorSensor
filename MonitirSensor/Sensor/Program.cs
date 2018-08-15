@@ -10,9 +10,8 @@ namespace Sensor
 		{
 			var config = new ConfigProvider();
 			var outputLog = new OutputLog();
-			using (var sensor = new Sensor(new MetricsProvider(),
-				new TCPSender(new TcpClient(config.ipAddress, config.port), outputLog),
-				outputLog))
+			using (var tcpSender = new TCPSender(new TcpClient(config.ipAddress, config.port), outputLog))
+			using (var sensor = new Sensor(new MetricsProvider(), tcpSender, outputLog))
 			{
 				sensor.Start();
 				outputLog.LogMessage("Press any key to exit");

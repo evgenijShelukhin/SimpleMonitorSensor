@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Common
 {
 	public class TcpClientWrap : IDisposable
 	{
-		private readonly TcpClient _client;
-		private readonly NetworkStream _stream;
+		private TcpClient _client;
+		private NetworkStream _stream;
 		private readonly IOutputLog _output;
 
 		public TcpClientWrap(TcpClient client, IOutputLog output)
@@ -17,20 +18,20 @@ namespace Common
 			_output = output;
 		}
 
-		protected virtual void Send(string message)
+		protected async virtual Task Send(string message)
 		{
 			byte[] data = Encoding.Unicode.GetBytes(message);
-			_stream.Write(data, 0, data.Length);
+			await _stream.WriteAsync(data, 0, data.Length);
 		}
 
-		protected virtual string Read()
+		protected async virtual Task<string> Read()
 		{
-			byte[] data = new byte[64]; //long is type of expected value
+			byte[] data = new byte[64]; //type of expected value is long
 			StringBuilder builder = new StringBuilder();
 			int bytes = 0;
 			do
 			{
-				bytes = _stream.Read(data, 0, data.Length);
+				bytes = await _stream.ReadAsync(data, 0, data.Length);
 				builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
 			}
 			while (_stream.DataAvailable);

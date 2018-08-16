@@ -11,6 +11,7 @@ namespace MonitorProject
 		private readonly IConfigProvider _configProvider;
 		private readonly IOutputLog _outputLog;
 		private TcpListener listener;
+		private int clientsCount;
 
 		public Monitor(IConfigProvider configProvider, IOutputLog outputLog)
 		{
@@ -18,7 +19,7 @@ namespace MonitorProject
 			_outputLog = outputLog;
 		}
 
-		public async Task Start(bool isForMultipleClients = true)
+		public async Task Start()
 		{
 			try
 			{
@@ -30,11 +31,11 @@ namespace MonitorProject
 				{
 					TcpClient client = await listener.AcceptTcpClientAsync();
 					TCPReciever reciever = new TCPReciever(client, _outputLog); //TODO create objects with object factory
-
+					clientsCount++;
 					_outputLog.LogMessage("New client connected");
 					var task = Task.Factory.StartNew(() => reciever.ProcessMessage());
 
-					if (!isForMultipleClients)
+					if (_configProvider.maxClientCont>0 && clientsCount >= _configProvider.maxClientCont)
 					{
 						break;
 					}

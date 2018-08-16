@@ -20,9 +20,9 @@ namespace Tests
 			monitorOutputLogMock = Mock.Of<IOutputLog>();
 			Mock.Get(monitorOutputLogMock).Setup(x => x.LogMessage(It.IsAny<string>()));
 
-			config = new ConfigProvider("127.0.0.1", 4321);
+			config = new ConfigProvider("127.0.0.1", 4321, 1);
 			var m = new MonitorProject.Monitor(config, monitorOutputLogMock);
-			monitorServiceThread = Task.Run(() => m.Start(false));
+			monitorServiceThread = Task.Run(() => m.Start());
 		}
 
 		[Test]

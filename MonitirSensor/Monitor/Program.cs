@@ -1,4 +1,5 @@
 ﻿using Common;
+using System;
 
 namespace MonitorProject
 {
@@ -9,6 +10,8 @@ namespace MonitorProject
 			var output = new OutputLog();
 			var monitor = new Monitor(new ConfigProvider(), output);
 			monitor.Start().Wait();
+			output.LogMessage("Press any key to exit");
+			Console.ReadKey();
 		}
 	}
 }
